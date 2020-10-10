@@ -23,7 +23,7 @@ defmodule LiveFormHelpers do
        %LiveFormField{
          errors: List.wrap(Keyword.get(form.errors, field, [])),
          value: Form.input_value(form, field),
-         label: Form.label(form, field),
+         label: Form.humanize(field),
          id: Form.input_id(form, field),
          name: Form.input_name(form, field)
        }}
@@ -1103,30 +1103,14 @@ defmodule LiveFormHelpers do
   def label(field, text_or_do_block_or_attributes)
 
   def label(field, do: block) do
-    label(field, [], do: block)
+    label(field, do: block)
   end
 
   def label(field, opts) when is_list(opts) do
-    label(field, field.label, opts)
-  end
-
-  def label(field, text) do
-    label(field, text, [])
-  end
-
-  @doc """
-  See `label/1`.
-  """
-  def label(field, text, do_block_or_attributes)
-
-  def label(%LiveFormField{} = field, opts, do: block) when is_list(opts) do
     opts = Keyword.put_new(opts, :for, field.id)
-    content_tag(:label, block, opts)
-  end
-
-  def label(%LiveFormField{} = field, text, opts) when is_list(opts) do
-    opts = Keyword.put_new(opts, :for, field.id)
-    content_tag(:label, text, opts)
+    IO.inspect field
+    IO.inspect opts
+    content_tag(:label, field.label, opts)
   end
 
   # Normalize field name to string version
