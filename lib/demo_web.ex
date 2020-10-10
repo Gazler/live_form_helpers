@@ -79,7 +79,11 @@ defmodule DemoWeb do
   defp view_helpers do
     quote do
       # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
+      import Phoenix.HTML
+      import Phoenix.HTML.Link
+      import Phoenix.HTML.Tag
+      import Phoenix.HTML.Format
+      import LiveFormHelpers
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers

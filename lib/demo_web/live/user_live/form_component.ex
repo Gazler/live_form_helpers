@@ -2,6 +2,7 @@ defmodule DemoWeb.UserLive.FormComponent do
   use DemoWeb, :live_component
 
   alias Demo.Accounts
+  @fields [:name, :active, :birthday, :age, :started_at, :bio, :start_time, :pet]
 
   @impl true
   def update(%{user: user} = assigns, socket) do
@@ -10,17 +11,18 @@ defmodule DemoWeb.UserLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:changeset, changeset)}
+     |> assign(:f, live_form_for(changeset, fields: @fields))}
   end
 
   @impl true
   def handle_event("validate", %{"user" => user_params}, socket) do
+
     changeset =
       socket.assigns.user
       |> Accounts.change_user(user_params)
       |> Map.put(:action, :validate)
 
-    {:noreply, assign(socket, :changeset, changeset)}
+    {:noreply, assign(socket, :f, live_form_for(changeset, fields: @fields))}
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
@@ -36,7 +38,7 @@ defmodule DemoWeb.UserLive.FormComponent do
          |> push_redirect(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :f, live_form_for(changeset, fields: @fields))}
     end
   end
 
@@ -49,7 +51,7 @@ defmodule DemoWeb.UserLive.FormComponent do
          |> push_redirect(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        {:noreply, assign(socket, :f, live_form_for(changeset, fields: @fields))}
     end
   end
 end

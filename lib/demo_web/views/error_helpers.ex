@@ -5,6 +5,15 @@ defmodule DemoWeb.ErrorHelpers do
 
   use Phoenix.HTML
 
+  def error_tag(field) do
+    Enum.map(field.errors, fn error ->
+      Phoenix.HTML.Tag.content_tag(:span, translate_error(error),
+        class: "invalid-feedback",
+        phx_feedback_for: field.id
+      )
+    end)
+  end
+
   @doc """
   Generates tag for inlined form input errors.
   """
